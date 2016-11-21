@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>calculator</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <h2>Calculator</h2>
+
+  <form id="calculatorPage-form2" class="list" [ngFormModel]="calculatorForm">
+    <ion-list>
+      <ion-list-header>Current Tree</ion-list-header>
+      <ion-item>
+        <ion-label color="primary">CurrentTID</ion-label>
+        <ion-input placeholder="Text Input"></ion-input>
+      </ion-item>
+
+      <ion-list-header>Marker1</ion-list-header>
+      <ion-item>
+        <ion-label color="primary">Marker 1 TID</ion-label>
+        <ion-input placeholder="Data Input"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary">Distance</ion-label>
+        <ion-input placeholder="Data Input" ng-model="input.Distance1"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary">Bearing</ion-label>
+        <ion-input placeholder="Data Input" ng-model="input.Bearing1"></ion-input>
+      </ion-item>
+
+
+      <ion-list-header>Marker2</ion-list-header>
+      <ion-item>
+        <ion-label color="primary">Marker 2 TID</ion-label>
+        <ion-input placeholder="Text Input"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary">Distance</ion-label>
+        <ion-input placeholder="Data Input" ng-model="input.Distance2"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary">Bearing</ion-label>
+        <ion-input placeholder="Data Input" ng-model="input.Bearing2"></ion-input>
+      </ion-item>
+
+
+    </ion-list>
+
+  </form>
+
+  <button ion-button block  > Summit </button>
+  <button ion-button block color="danger" (click)="cleanButtonClick()"> Clean </button>
+
+
+
+</ion-content>
