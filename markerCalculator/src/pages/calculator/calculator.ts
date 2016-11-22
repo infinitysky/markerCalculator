@@ -1,65 +1,51 @@
-//import { Component } from '@angular/core';
-import {EventEmitter, HostListener, Component, Directive, Output} from 'angular2/core'
+import { Component,NgModule } from '@angular/core';
+
 
 import { NavController } from 'ionic-angular';
-//import { Validators,FormBuilder, FormGroup } from '@angular/forms';
-import {FormBuilder, Control, ControlGroup, Validators} from 'angular2/common';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+//import {FormBuilder, Control, ControlGroup, Validators} from 'angular2/common';
 @Component({
   selector: 'page-calculator',
   //templateUrl: 'calculator.html'
   template: `
-     <form *ngIf="showForm" (ngSubmit)="onSubmit($event)" [ngFormModel]="form">
-       <input type="test" ngControl="name">
-       <input type="test" ngControl="email">
-       <input type="test" ngControl="username">
-       <button type="submit">submit</button>
-    </form>
-  `
+     <form [formGroup]="myForm" (submit)="saveForm($event)"> 
+       <ion-item>
+         <ion-label stacked>Field 1</ion-label>
+         <ion-input formControlName="field1" type="text"></ion-input> 
+       </ion-item>
+       <ion-item>
+       
+        <ion-label stacked>Field 2</ion-label>
+        <ion-input formControlName="field2" type="text"></ion-input>
+       </ion-item>
+       <ion-item>
+        <ion-label stacked>Field 3</ion-label>
+        <ion-input formControlName="field3" type="text"></ion-input>
+       </ion-item>
+       <button type="submit">Save Form</button> 
+     </form>
+    `
 
 
 })
 export class CalculatorPage {
-  name:Control;
-  username:Control;
-  email:Control;
 
-  form:ControlGroup;
 
-  constructor(private builder:FormBuilder) {
-    this.createForm();
-  }
+  constructor(public navCtrl: NavController,public builder:FormBuilder) {
 
-  createForm() {
-    this.name = new Control('', Validators.required);
-    this.email = new Control('', Validators.required);
-    this.username = new Control('', Validators.required);
 
-    this.form = this.builder.group({
-      name: this.name,
-      email: this.email,
-      username: this.username
+
+    this.myForm = formBuilder.group({ field1: [''],
+      field2: [''],
+      field3: ['']
     });
-  }
-
-  showForm:boolean = true;
-  onSubmit(value:any):void {
-    // code that happens when form is submitted
-    // then reset the form
-    this.showForm = false;
-    setTimeout(() => {
-      this.reset()
-      this.showForm = true;
-    });
-  }
-
-  reset() {
-    this.createForm();
+    
   }
 
 
-
-
-
+  saveForm(event){ event.preventDefault(); console.log(this.myForm.value);
+  }
 
 
   //constructor(public navCtrl: NavController, formBuilder: FormBuilder ) {}
