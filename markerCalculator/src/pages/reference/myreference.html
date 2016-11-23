@@ -11,34 +11,36 @@
 
     <h2>Reference Point</h2>
 
-    <form id="referencePointPage-form2" class="list">
+    <form class="list" [formGroup]="referenceDetailsForm">
       <ion-list>
+
         <ion-list-header>Marker1</ion-list-header>
         <ion-item>
           <ion-label color="primary">Marker 1 TID</ion-label>
-          <ion-input placeholder="Data Input"></ion-input>
+          <ion-input formControlName="marker1Tid"  placeholder="Data Input"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label color="primary">Distance</ion-label>
-          <ion-input placeholder="Data Input"></ion-input>
+          <ion-label color="primary">GPS Latitude</ion-label>
+          <ion-input placeholder="Data Input" formControlName="marker1GPSLatitude"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label color="primary">Bearing</ion-label>
-          <ion-input placeholder="Data Input"></ion-input>
+          <ion-label color="primary">GPS Longitude</ion-label>
+          <ion-input placeholder="Data Input" formControlName="marker1GPSLongitude"></ion-input>
         </ion-item>
+
 
         <ion-list-header>Marker2</ion-list-header>
         <ion-item>
           <ion-label color="primary">Marker 2 TID</ion-label>
-          <ion-input placeholder="Text Input"></ion-input>
+          <ion-input placeholder="Text Input" formControlName="marker2Tid"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label color="primary">Distance</ion-label>
-          <ion-input placeholder="Data Input"></ion-input>
+          <ion-label color="primary">GPS Latitude</ion-label>
+          <ion-input placeholder="Data Input" formControlName="marker2GPSLatitude"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-label color="primary">Bearing</ion-label>
-          <ion-input placeholder="Data Input"></ion-input>
+          <ion-label color="primary">GPS Longitude</ion-label>
+          <ion-input placeholder="Data Input" formControlName="marker2GPSLongitude"></ion-input>
         </ion-item>
 
 
@@ -46,8 +48,8 @@
 
     </form>
 
-    <button ion-button block  > Summit </button>
-    <button ion-button block color="danger"> Clean </button>
+    <button ion-button block (click)="submitButtonClick()" > Summit </button>
+    <button ion-button block color="danger" (click)="cleanButtonClick()"> Clean </button>
 
 
 
