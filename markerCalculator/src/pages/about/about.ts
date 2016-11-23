@@ -11,5 +11,12 @@ export class AboutPage {
   constructor(public navCtrl: NavController) {
 
   }
+  downloadDataFromServer(){
+    console.log("download");
+  }
+  uploadDataToServer(){
+    console.log("upload");
+  }
+
 
 }
