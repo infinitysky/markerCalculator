@@ -22,13 +22,14 @@ export class MyApp {
         name: "data.db",
         location: "default"
       }).then(() => {
-        db.executeSql("CREATE TABLE IF NOT EXISTS GPSlist (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, gpsLon double,gpsLat double);CREATE TABLE IF NOT EXISTS dittance (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, distance int, soutceMarkerID int, Bearing double)", {}).then((data) => {
-          console.log("TABLE CREATED: ", data);
+        //;CREATE TABLE IF NOT EXISTS dittance (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, distance int, soutceMarkerID int, Bearing double)
+        db.executeSql("CREATE TABLE IF NOT EXISTS GPSList (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, gpsLon double,gpsLat double); CREATE TABLE IF NOT EXISTS distance (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, distance double, soutceMarkerID INTEGER, Bearing double)", {}).then((data) => {
+          console.log("TABLE CREATED: ", JSON.stringify(data));
         }, (error) => {
-          console.error("Unable to execute sql", error);
+          console.error("Unable to execute sql", JSON.stringify(error));
         })
       }, (error) => {
-        console.error("Unable to open database", error);
+        console.error("Unable to open database", JSON.stringify(error));
       });
 
 
