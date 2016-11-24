@@ -12,6 +12,7 @@ import { SQLite } from 'ionic-native';
 })
 export class AboutPage {
   public myData: any;
+  public reveivedNumber:any;
 
   public database: SQLite;
   public postJson:any;
@@ -50,9 +51,9 @@ export class AboutPage {
         this.sqliteopeator.recreateDistanceTable();
         this.sqliteopeator.insertData("GPSList (markerID, gpsLon, gpsLat)",sqlquery);
         //this.sqliteopeator.insertData("GPSList ",sqlquery);
-        var number=this.sqliteopeator.countTable("GPSList");
-
-        this.doAlert(number);
+        this.reveivedNumber=this.sqliteopeator.countTable("GPSList");
+        console.log(this.reveivedNumber);
+        //this.doAlert(this.reveivedNumber);
 
 
       });
@@ -66,10 +67,12 @@ export class AboutPage {
     console.log(JSON.stringify(this.gpsdata.row.item));
 
   }
-  doAlert(number) {
+  doAlert() {
+    console.log("bofre Alert"+this.reveivedNumber);
+
     let alert = this.alerCtrl.create({
       title: 'Data Received',
-      message: number + 'rows new data haven downloaded to local device',
+      message: this.reveivedNumber + 'rows new data haven downloaded to local device',
       buttons: ['Ok']
     });
     alert.present()

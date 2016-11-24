@@ -3,10 +3,13 @@ import { Component } from '@angular/core';
 
 import { NavController,AlertController  } from 'ionic-angular';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MarkerService } from '../../providers/marker-service';
+import { SqliteService } from '../../providers/sqlite-service';
 
 //import {FormBuilder, Control, ControlGroup, Validators} from 'angular2/common';
 @Component({
   selector: 'page-calculator',
+  providers: [MarkerService,SqliteService],
   templateUrl: 'calculator.html'
 
 })
@@ -49,8 +52,8 @@ export class CalculatorPage {
 
   showConfirm() {
     let confirm = this.alertCtrl.create({
-      title: 'Use this lightsaber?',
-      message: 'Do you Accpet to use this lightsaber to do good across the intergalactic galaxy?',
+      title: 'Do you accept the difference?',
+      message: 'Do you accept the difference'+ 'xxx' +'between X1Y1 and X2Y2 ?',
       buttons: [
         {
           text: 'Disagree',

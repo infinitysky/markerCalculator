@@ -67,8 +67,9 @@ export class SqliteService {
 
   public countTable(tableSql) {
     //DELETE FROM table_name;
-    var newSqlQuery = 'SELECT count(*) FROM '+tableSql;
+    var newSqlQuery = 'SELECT count(*) AS c FROM '+tableSql;
     console.log(newSqlQuery);
+    var number=0;
 
     let db = new SQLite();
     db.openDatabase({
@@ -78,8 +79,10 @@ export class SqliteService {
       //;CREATE TABLE IF NOT EXISTS distance (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, distance int, soutceMarkerID int, Bearing double)
       db.executeSql(newSqlQuery, {}).then((data) => {
         console.log("countTable ", JSON.stringify(data));
-        console.log(data.rows.item(1));
-        return data;
+        console.log("testetst")
+        number=data.rows.item(0).c;
+        console.log(number);
+        return number;
       }, (error) => {
         console.error("countTable Unable to execute sql", JSON.stringify(error));
       })
@@ -128,7 +131,7 @@ export class SqliteService {
     }).then(() => {
       //;CREATE TABLE IF NOT EXISTS distance (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, distance int, soutceMarkerID int, Bearing double)
       db.executeSql(newSqlQuery, {}).then((data) => {
-        console.log(" ", JSON.stringify(data));
+        console.log("recreate : ", JSON.stringify(data));
 
         return data;
       }, (error) => {
@@ -201,6 +204,7 @@ export class SqliteService {
     }).then(() => {
       //;CREATE TABLE IF NOT EXISTS distance (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, distance int, soutceMarkerID int, Bearing double)
       db.executeSql(newSqlQuery, {}).then((data) => {
+        console.log("show all");
         console.log(JSON.stringify(data));
         //if(data.rows.length > 0) {
         //  for(var i = 0; i < data.rows.length; i++) {
@@ -211,7 +215,7 @@ export class SqliteService {
 
         //console.log(JSON.stringify(data.rows.item(1).markerID));
        // return data;
-        console.log(JSON.parse(data.rows.item).results);
+        //console.log(JSON.parse(data.rows.item).result);
         return data;
           // if(this.myQueryList) {
           //   // already loaded data
