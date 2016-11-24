@@ -16,7 +16,7 @@ export class MarkerService {
     console.log('Hello MarkerService Provider');
   }
 
-  load() {
+  public load() {
     if (this.mydata) {
       // already loaded data
       return Promise.resolve(this.mydata);

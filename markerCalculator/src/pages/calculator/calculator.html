@@ -37,11 +37,11 @@
       </ion-item>
       <ion-item>
         <ion-label class="myInputLabel" color="primary">Distance</ion-label>
-        <ion-input placeholder="Data Input" ftype="number" ormControlName="marker2Distance" ng-model="marker2Distance" margin-left="20px"></ion-input>
+        <ion-input placeholder="Data Input" type="number" formControlName="marker2Distance" ng-model="marker2Distance" margin-left="20px"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label class="myInputLabel" color="primary">Bearing</ion-label>
-        <ion-input placeholder="Data Input" type="number" formControlName="marker2Bearing" ng-model="marker2Distance" margin-left="20px"></ion-input>
+        <ion-input placeholder="Data Input" type="number" formControlName="marker2Bearing" ng-model="marker2Bearing" margin-left="20px"></ion-input>
       </ion-item>
 
 
@@ -51,6 +51,7 @@
 
   <button ion-button block (click)="submitButtonClick()" > Summit </button>
   <button ion-button block color="danger" (click)="cleanButtonClick()"> Clean </button>
+  <button ion-button block color="danger" (click)="markerExistCheck()"> markerExistCheck </button>
 
 
 

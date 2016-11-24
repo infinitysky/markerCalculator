@@ -13,21 +13,27 @@ import { SQLite } from 'ionic-native';
 export class AboutPage {
   public myData: any;
   public reveivedNumber:any;
+  public myNumber:any;
 
   public database: SQLite;
   public postJson:any;
   public gpsdata:any;
+  public itemList: Array<Object>;
 
   constructor(public navCtrl: NavController,public mymarks: MarkerService,public sqliteopeator:SqliteService,public alerCtrl: AlertController) {
-    this.database = new SQLite();
-    this.database.openDatabase({name: "data.db", location: "default"}).then(() => {
-      //this.refresh();
-    }, (error) => {
-      console.log("ERROR: ", error);
-    });
+    this.itemList=[];
 
 
   }
+
+  public loadDataArray() {
+    this.sqliteopeator.getGPSList().then((result) => {
+      this.itemList = <Array<Object>> result;
+    }, (error) => {
+      console.log("ERROR: ", error);
+    });
+  }
+
   downloadDataFromServer(){
     console.log("download");
     var sqlquery='';
@@ -50,9 +56,19 @@ export class AboutPage {
         this.sqliteopeator.dropDistanceTable();
         this.sqliteopeator.recreateDistanceTable();
         this.sqliteopeator.insertData("GPSList (markerID, gpsLon, gpsLat)",sqlquery);
-        //this.sqliteopeator.insertData("GPSList ",sqlquery);
-        this.reveivedNumber=this.sqliteopeator.countTable("GPSList");
-        console.log(this.reveivedNumber);
+
+
+
+        this.sqliteopeator.countTable("GPSList");
+        console.log(this.itemList.length);
+        this.loadDataArray();
+        this.doAlert();
+
+        ///this.myNumber=this.reveivedNumber;
+         // this.doAlert(this.reveivedNumber);
+
+
+
         //this.doAlert(this.reveivedNumber);
 
 
@@ -67,15 +83,26 @@ export class AboutPage {
     console.log(JSON.stringify(this.gpsdata.row.item));
 
   }
+
   doAlert() {
-    console.log("bofre Alert"+this.reveivedNumber);
+    console.log("bofre Alert "+this.itemList.length);
 
     let alert = this.alerCtrl.create({
       title: 'Data Received',
-      message: this.reveivedNumber + 'rows new data haven downloaded to local device',
+      message: this.itemList.length + ' rows new data have been downloaded to local device',
       buttons: ['Ok']
     });
     alert.present()
+  }
+  public dataCheck(){
+   // this.itemList=this.sqliteopeator.myQueryList;
+    //let myCheck=this.sqliteopeator.myQueryList.length;
+    console.log("data check");
+    this.loadDataArray();
+    this.doAlert();
+
+
+
   }
 
 

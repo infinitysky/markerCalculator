@@ -14,11 +14,25 @@ export class SqliteService {
   mydata :any;
   tableName:string;
 
+  private storage: SQLite;
+  private isOpen: boolean;
+
   public database: SQLite;
   public myQueryList: Array<Object>;
+  public fullQueryData:any;
 
   constructor(public http: Http) {
    // console.log('Hello SqliteService Provider');
+
+    if(!this.isOpen) {
+      this.storage = new SQLite();
+      this.storage.openDatabase({name: "data.db", location: "default"}).then(() => {
+        this.storage.executeSql("CREATE TABLE IF NOT EXISTS GPSList (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, gpsLon double,gpsLat double)", []);
+        this.isOpen = true;
+      });
+    }
+
+
   }
   public insertData(tableName, mydata){
     //INSERT INTO MyTable VALUES ("John", 123, "Lloyds Office");
@@ -69,26 +83,33 @@ export class SqliteService {
     //DELETE FROM table_name;
     var newSqlQuery = 'SELECT count(*) AS c FROM '+tableSql;
     console.log(newSqlQuery);
-    var number=0;
 
-    let db = new SQLite();
-    db.openDatabase({
-      name: "data.db",
-      location: "default"
-    }).then(() => {
-      //;CREATE TABLE IF NOT EXISTS distance (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, distance int, soutceMarkerID int, Bearing double)
-      db.executeSql(newSqlQuery, {}).then((data) => {
-        console.log("countTable ", JSON.stringify(data));
-        console.log("testetst")
-        number=data.rows.item(0).c;
-        console.log(number);
-        return number;
-      }, (error) => {
-        console.error("countTable Unable to execute sql", JSON.stringify(error));
-      })
-    }, (error) => {
-      console.error("countTable Unable to open database", JSON.stringify(error));
+    return new Promise((resolve, reject) => {
+
+        let db = new SQLite();
+        db.openDatabase({
+          name: "data.db",
+          location: "default"
+        }).then(() => {
+          //;CREATE TABLE IF NOT EXISTS dittance (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, distance int, soutceMarkerID int, Bearing double)
+          db.executeSql(newSqlQuery, {}).then((data) => {
+            console.log("countTable ", JSON.stringify(data));
+            this.mydata=data.rows.item(0).c;
+            console.log("countTable() -> this.data : "+ this.mydata);
+            resolve(this.mydata);
+
+          }, (error) => {
+            //console.error("Unable to execute sql", error);
+            console.error("countTable Unable to execute sql", JSON.stringify(error));
+            reject(error);
+          })
+        }, (error) => {
+          console.error("countTable Unable to open database", JSON.stringify(error));
+          reject(error);
+        });
+
     });
+
   }
 
 
@@ -110,7 +131,11 @@ export class SqliteService {
       db.executeSql(newSqlQuery, {}).then((data) => {
         console.log(" ", JSON.stringify(data));
 
-        return data;
+        return new Promise(resolve => {
+          resolve(data);
+        });
+
+
       }, (error) => {
         console.error("dropGPSListTable Unable to execute sql", JSON.stringify(error));
       })
@@ -197,84 +222,146 @@ export class SqliteService {
     var newSqlQuery='SELECT * FROM '+ tableName;
     console.log(newSqlQuery);
 
-    let db = new SQLite();
-    db.openDatabase({
-      name: "data.db",
-      location: "default"
-    }).then(() => {
-      //;CREATE TABLE IF NOT EXISTS distance (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, distance int, soutceMarkerID int, Bearing double)
-      db.executeSql(newSqlQuery, {}).then((data) => {
+    return new Promise((resolve, reject) => {
+      this.storage.executeSql(newSqlQuery, []).then((data) => {
         console.log("show all");
         console.log(JSON.stringify(data));
-        //if(data.rows.length > 0) {
-        //  for(var i = 0; i < data.rows.length; i++) {
-          //  this.myQueryList.push({markerID: data.rows.item(i).markerID, gpsLon: data.rows.item(i).gpsLon, gpsLat: data.rows.item(i).gpsLat});
-          //  console.log(data.rows.item(i).markerID);
-         // }
-        //}
-
-        //console.log(JSON.stringify(data.rows.item(1).markerID));
-       // return data;
-        //console.log(JSON.parse(data.rows.item).result);
-        return data;
-          // if(this.myQueryList) {
-          //   // already loaded data
-          //   return Promise.resolve(this.myQueryList);
-          // }
-          //
-          // // don't have the data yet
-          // return new Promise(resolve => {
-          //
-          //
-          // });
-
-
+        resolve(data);
       }, (error) => {
-        console.error("showTable Unable to execute sql", JSON.stringify(error));
-      })
-    }, (error) => {
-      console.error("showTable Unable to open database", JSON.stringify(error));
+        reject(error);
+      });
     });
-
-
-
-    // this.database.executeSql(newSqlQuery, []).then((data) => {
-    //   if(data.rows.length > 0) {
-    //     for(var i = 0; i < data.rows.length; i++) {
-    //       this.myQueryList.push({markerID: data.rows.item(i).markerID, gpsLon: data.rows.item(i).gpsLon, gpsLat: data.rows.item(i).gpsLat});
-    //     }
-    //   }
-    //   console.log(JSON.stringify(data.rows.item(1).markerID));
-    //   return this.myQueryList;
-    // }, (error) => {
-    //   console.log("ERROR: " + JSON.stringify(error));
-    // });
 
   }
 
-  public searchVale(markerID){
 
-    var newSqlQuery = 'SELECT * FROM GPSList where markerID='+markerID;
+  public searchVale(markerID:number) {
+    //DELETE FROM table_name;
+    var newSqlQuery = 'SELECT * FROM GPSList WHERE markerID='+markerID;
     console.log(newSqlQuery);
 
-    let db = new SQLite();
-    db.openDatabase({
-      name: "data.db",
-      location: "default"
-    }).then(() => {
-      //;CREATE TABLE IF NOT EXISTS distance (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, distance int, soutceMarkerID int, Bearing double)
-      db.executeSql(newSqlQuery, {}).then((data) => {
-        console.log(" ", JSON.stringify(data));
-        console.log(data.rows.item(1).markerID);
-        return data;
+    return new Promise((resolve, reject) => {
+
+      let db = new SQLite();
+      db.openDatabase({
+        name: "data.db",
+        location: "default"
+      }).then(() => {
+        //;CREATE TABLE IF NOT EXISTS dittance (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, distance int, soutceMarkerID int, Bearing double)
+        db.executeSql(newSqlQuery, {}).then((data) => {
+          console.log("searchVale ", JSON.stringify(data));
+          this.mydata=data.rows.item(0);
+          console.log("searchVale() -> this.data : "+ this.mydata);
+          resolve(this.mydata);
+
+        }, (error) => {
+          //console.error("Unable to execute sql", error);
+          console.error("countTable Unable to execute sql", JSON.stringify(error));
+          reject(error);
+        })
       }, (error) => {
-        console.error("dropDistanceTable Unable to execute sql", JSON.stringify(error));
-      })
-    }, (error) => {
-      console.error("dropDistanceTable Unable to open database", JSON.stringify(error));
+        console.error("countTable Unable to open database", JSON.stringify(error));
+        reject(error);
+      });
+
+    });
+
+  }
+
+
+
+
+//example
+  public getPeople() {
+    return new Promise((resolve, reject) => {
+      this.storage.executeSql("SELECT * FROM people", []).then((data) => {
+        let people = [];
+        if(data.rows.length > 0) {
+          for(let i = 0; i < data.rows.length; i++) {
+            people.push({
+              id: data.rows.item(i).id,
+              firstname: data.rows.item(i).firstname,
+              lastname: data.rows.item(i).lastname
+            });
+          }
+        }
+        resolve(people);
+      }, (error) => {
+        reject(error);
+      });
+    });
+  }
+
+  public getGPSList() {
+    var newSqlQuery = 'SELECT * FROM GPSList';
+    console.log(newSqlQuery);
+
+    return new Promise((resolve, reject) => {
+      this.storage.executeSql("SELECT * FROM GPSList", []).then((data) => {
+        let myGPSList = [];
+        if (data.rows.length > 0) {
+          for (let i = 0; i < data.rows.length; i++) {
+            myGPSList.push({
+              markerID: data.rows.item(i).markerID,
+              gpsLon: data.rows.item(i).gpsLon,
+              gpsLat: data.rows.item(i).gpsLat
+            });
+          }
+        }
+
+        //this.fullQueryDaya=data.rows;
+        //this.myQueryList=myGPSList;
+        resolve(myGPSList);
+      }, (error) => {
+        reject(error);
+      });
+    });
+  }
+
+
+  public getGPSData() {
+
+    var newSqlQuery = 'SELECT * FROM GPSList';
+    console.log(newSqlQuery);
+
+    return new Promise((resolve, reject) => {
+
+      let db = new SQLite();
+      db.openDatabase({
+        name: "data.db",
+        location: "default"
+      }).then(() => {
+        //;CREATE TABLE IF NOT EXISTS dittance (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, distance int, soutceMarkerID int, Bearing double)
+        db.executeSql(newSqlQuery, {}).then((data) => {
+          console.log("getGPSData ", JSON.stringify(data));
+          let myGPSList = [];
+          this.fullQueryData=data;
+
+          for(var i=0; i<this.fullQueryData.rows.length;i++){
+            console.log(this.fullQueryData.rows.item(i).markerID+" "+this.fullQueryData.rows.item(i).gpsLon +"  "+ this.fullQueryData.rows.item(i).gpsLat);
+
+          }
+
+          resolve(this.fullQueryData);
+
+        }, (error) => {
+          //console.error("Unable to execute sql", error);
+          console.error("countTable Unable to execute sql", JSON.stringify(error));
+          reject(error);
+        })
+      }, (error) => {
+        console.error("countTable Unable to open database", JSON.stringify(error));
+        reject(error);
+      });
+
     });
 
 
+
   }
+
+
+
+
 
 }
