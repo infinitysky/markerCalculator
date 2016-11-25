@@ -11,37 +11,51 @@
     <ion-list>
       <ion-list-header>Current Tree</ion-list-header>
       <ion-item>
-        <ion-label class="myInputLabel" color="primary">CurrentTID</ion-label>
-        <ion-input formControlName="currentTID" placeholder="Data Input"></ion-input>
+
+          
+
+        <ion-label class="myInputLabel" color="primary" item-content>CurrentTID</ion-label>
+        <ion-input formControlName="currentTID" type="number" placeholder="Data Input" width-10	></ion-input>
       </ion-item>
+
+    <ion-item>
+      <ion-label>Username</ion-label>
+      <ion-input type="text" value=""></ion-input>
+    </ion-item>
+        <ion-item>
+      <ion-label>Current Tree</ion-label>
+      <ion-input type="text" value=""></ion-input>
+    </ion-item>
+
+
 
       <ion-list-header>Marker1</ion-list-header>
       <ion-item>
-        <ion-label class="myInputLabel" color="primary">Marker 1 TID</ion-label>
-        <ion-input formControlName="marker1Tid"  placeholder="Data Input"></ion-input>
+        <ion-label class="myInputLabel" color="primary" item-content>Marker 1 TID</ion-label>
+        <ion-input formControlName="marker1Tid" type="number" placeholder="Data Input"item-right></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label class="myInputLabel" color="primary">Distance</ion-label>
-        <ion-input placeholder="Data Input" type="number" formControlName="marker1Distance"></ion-input>
+        <ion-label class="myInputLabel" color="primary" item-content>Distance</ion-label>
+        <ion-input placeholder="Data Input" type="number" formControlName="marker1Distance"item-right></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label class="myInputLabel" color="primary">Bearing</ion-label>
-        <ion-input placeholder="Data Input" type="number" formControlName="marker1Bearing"></ion-input>
+        <ion-label class="myInputLabel" color="primary" item-content>Bearing</ion-label>
+        <ion-input placeholder="Data Input" type="number" formControlName="marker1Bearing" item-right></ion-input>
       </ion-item>
 
 
       <ion-list-header>Marker2</ion-list-header>
       <ion-item>
-        <ion-label class="myInputLabel" color="primary">Marker 2 TID</ion-label>
-        <ion-input placeholder="Data Input" formControlName="marker2Tid"  ng-model="marker2Tid" margin-left="20px"></ion-input>
+        <ion-label class="myInputLabel" color="primary" item-content>Marker 2 TID</ion-label>
+        <ion-input placeholder="Data Input" formControlName="marker2Tid" type="number"  ng-model="marker2Tid" item-right></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label class="myInputLabel" color="primary">Distance</ion-label>
-        <ion-input placeholder="Data Input" type="number" formControlName="marker2Distance" ng-model="marker2Distance" margin-left="20px"></ion-input>
+        <ion-label class="myInputLabel" color="primary" item-content>Distance</ion-label>
+        <ion-input placeholder="Data Input" type="number" formControlName="marker2Distance" ng-model="marker2Distance" item-right></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label class="myInputLabel" color="primary">Bearing</ion-label>
-        <ion-input placeholder="Data Input" type="number" formControlName="marker2Bearing" ng-model="marker2Bearing" margin-left="20px"></ion-input>
+        <ion-label class="myInputLabel" color="primary" item-content>Bearing</ion-label>
+        <ion-input placeholder="Data Input" type="number" formControlName="marker2Bearing" ng-model="marker2Bearing" item-right></ion-input>
       </ion-item>
 
 
@@ -51,7 +65,7 @@
 
   <button ion-button block (click)="submitButtonClick()" > Summit </button>
   <button ion-button block color="danger" (click)="cleanButtonClick()"> Clean </button>
-  <button ion-button block color="danger" (click)="markerExistCheck()"> markerExistCheck </button>
+  <!--<button ion-button block color="danger" (click)="markerExistCheck()"> markerExistCheck </button>-->
 
 
 

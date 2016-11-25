@@ -23,7 +23,7 @@ export class MyApp {
         location: "default"
       }).then(() => {
         //;CREATE TABLE IF NOT EXISTS dittance (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, distance int, soutceMarkerID int, Bearing double)
-        db.executeSql("CREATE TABLE IF NOT EXISTS GPSList (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, gpsLon double,gpsLat double); CREATE TABLE IF NOT EXISTS distance (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, distance double, soutceMarkerID INTEGER, Bearing double)", {}).then((data) => {
+        db.executeSql("CREATE TABLE IF NOT EXISTS GPSList (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, gpsXt double,gpsYt double); CREATE TABLE IF NOT EXISTS distance (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, distance double, soutceMarkerID INTEGER, Bearing double)", {}).then((data) => {
           console.log("TABLE CREATED: ", JSON.stringify(data));
         }, (error) => {
           console.error("Unable to execute sql", JSON.stringify(error));

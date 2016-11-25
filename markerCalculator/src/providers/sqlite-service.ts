@@ -27,7 +27,7 @@ export class SqliteService {
     if(!this.isOpen) {
       this.storage = new SQLite();
       this.storage.openDatabase({name: "data.db", location: "default"}).then(() => {
-        this.storage.executeSql("CREATE TABLE IF NOT EXISTS GPSList (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, gpsLon double,gpsLat double)", []);
+        this.storage.executeSql("CREATE TABLE IF NOT EXISTS GPSList (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, gpsXt double, gpsYt double)", []);
         this.isOpen = true;
       });
     }
@@ -146,7 +146,7 @@ export class SqliteService {
 
   public recreateGPSListTable() {
     //DELETE FROM table_name;
-    var newSqlQuery = 'CREATE TABLE IF NOT EXISTS GPSList (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, gpsLon double,gpsLat double)';
+    var newSqlQuery = 'CREATE TABLE IF NOT EXISTS GPSList (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, gpsXt double,gpsYt double)';
     console.log(newSqlQuery);
 
     let db = new SQLite();
@@ -250,7 +250,7 @@ export class SqliteService {
         //;CREATE TABLE IF NOT EXISTS dittance (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, distance int, soutceMarkerID int, Bearing double)
         db.executeSql(newSqlQuery, {}).then((data) => {
           console.log("searchVale ", JSON.stringify(data));
-          this.mydata=data.rows.item(0);
+          this.mydata=data;
           console.log("searchVale() -> this.data : "+ this.mydata);
           resolve(this.mydata);
 
@@ -303,8 +303,8 @@ export class SqliteService {
           for (let i = 0; i < data.rows.length; i++) {
             myGPSList.push({
               markerID: data.rows.item(i).markerID,
-              gpsLon: data.rows.item(i).gpsLon,
-              gpsLat: data.rows.item(i).gpsLat
+              gpsXt: data.rows.item(i).gpsXt,
+              gpsYt: data.rows.item(i).gpsYt
             });
           }
         }
@@ -338,7 +338,7 @@ export class SqliteService {
           this.fullQueryData=data;
 
           for(var i=0; i<this.fullQueryData.rows.length;i++){
-            console.log(this.fullQueryData.rows.item(i).markerID+" "+this.fullQueryData.rows.item(i).gpsLon +"  "+ this.fullQueryData.rows.item(i).gpsLat);
+            console.log(this.fullQueryData.rows.item(i).markerID+" "+this.fullQueryData.rows.item(i).gpsXt +"  "+ this.fullQueryData.rows.item(i).gpsYt);
 
           }
 
@@ -357,6 +357,40 @@ export class SqliteService {
     });
 
 
+
+  }
+
+
+  public countRecord(markerID) {
+    //DELETE FROM table_name;
+    var newSqlQuery = 'SELECT count(*) AS c FROM  GPSList WHERE markerID='+markerID;
+    console.log(newSqlQuery);
+
+    return new Promise((resolve, reject) => {
+
+      let db = new SQLite();
+      db.openDatabase({
+        name: "data.db",
+        location: "default"
+      }).then(() => {
+        //;CREATE TABLE IF NOT EXISTS dittance (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, distance int, soutceMarkerID int, Bearing double)
+        db.executeSql(newSqlQuery, {}).then((data) => {
+          console.log("countRecord ", JSON.stringify(data));
+          this.mydata=data.rows.item(0).c;
+          console.log("countRecord() -> this.data : "+ this.mydata);
+          resolve(this.mydata);
+
+        }, (error) => {
+          //console.error("Unable to execute sql", error);
+          console.error("countRecord Unable to execute sql", JSON.stringify(error));
+          reject(error);
+        })
+      }, (error) => {
+        console.error("countRecord Unable to open database", JSON.stringify(error));
+        reject(error);
+      });
+
+    });
 
   }
 

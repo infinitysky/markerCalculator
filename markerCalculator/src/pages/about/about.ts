@@ -55,7 +55,7 @@ export class AboutPage {
         this.sqliteopeator.recreateGPSListTable();
         this.sqliteopeator.dropDistanceTable();
         this.sqliteopeator.recreateDistanceTable();
-        this.sqliteopeator.insertData("GPSList (markerID, gpsLon, gpsLat)",sqlquery);
+        this.sqliteopeator.insertData("GPSList (markerID, gpsXt, gpsYt)",sqlquery);
 
 
 

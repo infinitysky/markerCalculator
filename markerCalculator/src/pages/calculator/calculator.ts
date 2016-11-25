@@ -17,19 +17,26 @@ import * as mathjs from "mathjs";
 })
 export class CalculatorPage {
   public tmpData;
+  public mark1Data:any;
+  public mark2Data:any;
+
  // markerDetailsForm: FormGroup;
   public markerList: Array<Object>;
   public calculatorFullQueryData:any;
 
   public markerCheck1 :boolean;
   public markerCheck2 :boolean;
-  public cmarker1ID : any;
-  public cmarker1Distance : any;
-  public cmarker1Bearing : any;
-  public cmarker2ID : any;
-  public cmarker2Distance : any;
-  public cmarker2Bearing : any;
-  public cCurrentID :any;
+  public cmarker1ID : number;
+  public cmarker1Distance : number;
+  public cmarker1Bearing : number;
+  public cmarker2ID : number;
+  public cmarker2Distance : number;
+  public cmarker2Bearing : number;
+  public cCurrentID :number;
+  public newXt : number;
+  public newYt : number;
+  public newErrorRate : number;
+
 
 
 
@@ -48,6 +55,7 @@ export class CalculatorPage {
     this.calculatorFullQueryData="";
     this.markerCheck1=false;
     this.markerCheck2=false;
+    this.newErrorRate=0;
 
     this.loadGPSdata();
 
@@ -70,8 +78,8 @@ export class CalculatorPage {
   }
   submitButtonClick(){
 
-    this.loadGPSdata();
-    console.log(this.calculatorFullQueryData.rows.length);
+   // this.loadGPSdata();
+    //console.log(this.calculatorFullQueryData.rows.length);
 
     console.log("Submit Clicked");
     console.log(this.markerDetailsForm.value.currentTID);
@@ -87,20 +95,34 @@ export class CalculatorPage {
     this.cmarker2Distance=this.markerDetailsForm.value.marker2Distance;
     this.cmarker2Bearing=this.markerDetailsForm.value.marker2Bearing;
 
-    this.markerExistCheck(1,this.cmarker1ID);
-    this.markerExistCheck(2,this.cmarker2ID);
+    console.log(this.cmarker1ID);
+    console.log(this.cmarker2ID);
 
-    if(this.markerCheck2!=true){
-      this.doAlert("Marker2 is not exist in database");
+    this.markerExistCheck();
+    //this.markerExistCheck(2,this.cmarker2ID);
 
-    }
-    else if(this.markerCheck1!=true){
-      this.doAlert("Marker1 is not exist in database");
+    console.log(this.markerCheck1);
+    console.log(this.markerCheck2);
 
-    }else{
-      this.showConfirm();
+    this.calculator();
+    this.showConfirm();
 
-    }
+    // if(this.markerCheck1==false){
+    //   console.log(this.markerCheck1);
+    //   this.doAlert("Marker1 is not exist in database");
+    //
+    // }
+    // else if(this.markerCheck2==false){
+    //   console.log(this.markerCheck2);
+    //   this.doAlert("Marker2 is not exist in database");
+    //
+    // }else{
+    //   console.log(this.markerCheck1);
+    //   console.log(this.markerCheck2);
+    //   this.calculator();
+    //   this.showConfirm();
+    //
+    // }
 
 
 
@@ -109,9 +131,11 @@ export class CalculatorPage {
 
 
   showConfirm() {
+
+
     let confirm = this.alertCtrl.create({
       title: 'Do you accept the difference?',
-      message: 'Do you accept the difference'+ 'xxx' +'between X1Y1 and X2Y2 ?',
+      message: 'Do you accept the difference '+ this.newErrorRate +' between X1Y1 and X2Y2 ?',
       buttons: [
         {
           text: 'Disagree',
@@ -119,9 +143,6 @@ export class CalculatorPage {
             console.log('Disagree clicked');
 
 
-            this.markerDetailsForm.value.marker2Tid=[''];
-            this.markerDetailsForm.value.marker2Distance=[''];
-            this.markerDetailsForm.value.marker2Bearing=[''];
           }
         },
         {
@@ -129,6 +150,11 @@ export class CalculatorPage {
           handler: () => {
             console.log('Agree clicked');
             console.log(this.markerDetailsForm.value);
+            var sqlquery='('+this.cCurrentID+','+this.newXt+','+this.newYt+')';
+            console.log(sqlquery);
+
+            this.sqliteopeator.insertData("GPSList (markerID, gpsXt, gpsYt)",sqlquery);
+
             this.markerDetailsForm.reset();
           }
         }
@@ -160,7 +186,6 @@ export class CalculatorPage {
     //
     //   }
     // );
-
     this.calculatorFullQueryData=this.sqliteopeator.fullQueryData;
     console.log(JSON.stringify(this.tmpData));
     console.log("this this the end?");
@@ -170,39 +195,105 @@ export class CalculatorPage {
   public getMarkerInfo(){
 
 
-  }
-  public calculator(distance,baring){
 
   }
 
 
+  public calculator(){
+//   #得到Marker1的x,y,distance(r)以及bearing(o)的信息
+//     x1 = GPS$Xt[which(GPS$Tid==Dis$Mid1[i])];
+//     y1 = GPS$Yt[which(GPS$Tid==Dis$Mid1[i])];
+//     r1 = Dis$Dis1[i]
+//     o1 = Dis$Bear1[i]
+// #计算根据Marker1所得到的currentID的坐标信息（Xt1,Yt1），pi取3.14159
+//     Xt1 = sin((11.75+o1+180)/180*pi)*r1 + x1
+//     Yt1 = cos((11.75+o1+180)/180*pi)*r1 + y1
+//
+// #得到Marker2的x,y,distance(r)以及bearing(o)的信息
+//     x2 = GPS$Xt[which(GPS$Tid==Dis$Mid2[i])];
+//     y2 = GPS$Yt[which(GPS$Tid==Dis$Mid2[i])];
+//     r2 = Dis$Dis2[i]
+//     o2 = Dis$Bear2[i]
+// #计算根据Marker2所得到的currentID的坐标信息(Xt2,Yt2),pi取3.14159
+//     Xt2 = sin((11.75+o2+180)/180*pi)*r2 + x2
+//     Yt2 = cos((11.75+o2+180)/180*pi)*r2 + y2
+//   #计算根据不同Marker得到的坐标信息之间的误差Error（Er）
+//   Er = sqrt((Xt1-Xt2)^2+(Yt1-Yt2)^2)
 
-  public markerExistCheck(markerCheck:number,checkMarkerID:number){
 
-    this.sqliteopeator.searchVale(checkMarkerID).then((data)=>{
+    var x1=this.mark1Data.gpsXt;
+    var y1=this.mark1Data.gpsYt;
+    var x2=this.mark2Data.gpsXt;
+    var y2=this.mark2Data.gpsYt;
+    var r1=this.cmarker1Distance;
+    var r2=this.cmarker2Distance;
+    var o1=this.cmarker1Bearing;
+    var o2=this.cmarker2Bearing;
 
+
+    var Xt1 = Math.asin((11.75+o1+180)/180* Math.PI)*r1 + x1;
+    var Yt1 = Math.acos((11.75+o1+180)/180* Math.PI)*r1 + y1;
+
+    var Xt2 = Math.asin((11.75+o2+180)/180*Math.PI)*r2 + x2
+    var Yt2 = Math.acos((11.75+o2+180)/180*Math.PI)*r2 + y2
+    var Er = Math.sqrt((Xt1-Xt2)^2+(Yt1-Yt2)^2);
+    this.newErrorRate=Er;
+
+
+
+    // if (Er<3){
+      this.newXt = ((Xt1+Xt2)/2);
+      this.newYt = ((Yt1+Yt2)/2);
+    // }
+    console.log("XT1 :"+Xt1);
+    console.log("YT1 :"+Yt1);
+    console.log("XT2 :"+Xt2);
+    console.log("YT2 :"+Er);
+
+    console.log("this.newXt :"+this.newXt);
+    console.log("this.newYt :"+this.newYt);
+
+
+
+
+
+  }
+
+
+
+  public markerExistCheck(){
+
+
+    this.sqliteopeator.searchVale(this.cmarker1ID).then((data)=>{
       this.tmpData=data;
+      this.mark1Data=this.tmpData.rows.item(0);;
+      console.log(this.mark1Data);
+      if(this.tmpData.rows.length>0){
 
-      //console.log(this.tmpData);
-      if(this.tmpData.length<1){
-        console.log("404 not found");
-        //this.doAlert("marker1 not exist","Marker Not Exist");
-      }else{
-        if(1==markerCheck){
-          this.markerCheck1=true;
-        }
-        if(2==markerCheck){
-          this.markerCheck2=true;
-        }
-
-        console.log(this.tmpData);
+        this.markerCheck1=true;
       }
 
-      console.log("marker1 check");
+
 
     }, (error) => {
       console.log("ERROR: ", error);
     });
+
+    this.sqliteopeator.searchVale(this.cmarker2ID).then((data)=>{
+      this.tmpData=data;
+      this.mark2Data=this.tmpData.rows.item(0);;
+      console.log(this.mark2Data);
+
+
+      if(this.tmpData.rows.length>0){
+        this.markerCheck2=true;
+      }
+
+
+    }, (error) => {
+      console.log("ERROR: ", error);
+    });
+
 
 
   }

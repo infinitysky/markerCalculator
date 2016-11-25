@@ -27,7 +27,7 @@ export class MarkerService {
       // We're using Angular HTTP provider to request the data,
       // then on the response, it'll map the JSON data to a parsed JS object.
       // Next, we process the data and resolve the promise with the new data.
-      var url = 'basicDatabase.json';
+      var url = 'http://www.shapethefuture.info/basicDatabase.json';
       this.http.get(url)
         .map(res => res.json())
         .subscribe(data => {
