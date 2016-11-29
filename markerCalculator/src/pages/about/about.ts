@@ -18,10 +18,12 @@ export class AboutPage {
   public database: SQLite;
   public postJson:any;
   public gpsdata:any;
+  public gpsDataSet:any;
   public itemList: Array<Object>;
 
   constructor(public navCtrl: NavController,public mymarks: MarkerService,public sqliteopeator:SqliteService,public alerCtrl: AlertController) {
     this.itemList=[];
+    this.loadDataSet();
 
 
   }
@@ -29,6 +31,32 @@ export class AboutPage {
   public loadDataArray() {
     this.sqliteopeator.getGPSList().then((result) => {
       this.itemList = <Array<Object>> result;
+    }, (error) => {
+      console.log("ERROR: ", error);
+    });
+  }
+
+
+
+
+  public loadDataSet() {
+
+    // this.sqliteopeator.showTable("GPSList").then(data=>{
+    //   this.gpsdata=data;
+    //   console.log("get data");
+    // });
+    //
+    // for(let i = 0; i < this.gpsdata.rows.length; i++) {
+    //   console.log("json output: "+ this.gpsdata.rows.item(i).markerID);
+    // }
+
+
+    this.sqliteopeator.getGPSData().then((result) => {
+      this.gpsDataSet = result;
+
+      for(let i = 0; i < this.gpsDataSet.rows.length; i++) {
+        console.log("gpsDataSet output: "+ this.gpsDataSet.rows.item(i).markerID);
+      }
     }, (error) => {
       console.log("ERROR: ", error);
     });
@@ -60,9 +88,12 @@ export class AboutPage {
 
 
         this.sqliteopeator.countTable("GPSList");
-        console.log(this.itemList.length);
+
         this.loadDataArray();
-        this.doAlert();
+
+        console.log("current length : "+ this.itemList.length);
+        var arrayLenth=this.itemList.length;
+        this.doAlert(arrayLenth);
 
         ///this.myNumber=this.reveivedNumber;
          // this.doAlert(this.reveivedNumber);
@@ -88,26 +119,32 @@ export class AboutPage {
       console.log("json output: "+ this.gpsdata.rows.item(i).markerID);
     }
 
-   // console.log(JSON.stringify(this.gpsdata.row.item));
+   console.log(JSON.stringify(this.gpsdata.row.length));
+    var numbersOfRecored=this.gpsdata.row.length;
+
+    this.doAlert(numbersOfRecored);
 
   }
 
-  doAlert() {
-    console.log("bofre Alert "+this.itemList.length);
+  doAlert(arrayLenth:number) {
+    console.log("bofre Alert "+arrayLenth);
 
     let alert = this.alerCtrl.create({
       title: 'Data Received',
-      message: this.itemList.length + ' rows new data have been downloaded to local device',
+      message: arrayLenth + ' rows new data have been downloaded to local device',
       buttons: ['Ok']
     });
     alert.present()
   }
+  
   public dataCheck(){
    // this.itemList=this.sqliteopeator.myQueryList;
     //let myCheck=this.sqliteopeator.myQueryList.length;
     console.log("data check");
     this.loadDataArray();
-    this.doAlert();
+    console.log("current length : "+ this.itemList.length);
+    var arrayLenth=this.itemList.length;
+    this.doAlert(arrayLenth);
 
 
 

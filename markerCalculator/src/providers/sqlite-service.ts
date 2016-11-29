@@ -328,23 +328,20 @@ export class SqliteService {
         //;CREATE TABLE IF NOT EXISTS dittance (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, distance int, soutceMarkerID int, Bearing double)
         db.executeSql(newSqlQuery, {}).then((data) => {
           console.log("getGPSData ", JSON.stringify(data));
-          let myGPSList = [];
+         // let myGPSList = [];
           this.fullQueryData=data;
 
-          for(var i=0; i<this.fullQueryData.rows.length;i++){
-            console.log(this.fullQueryData.rows.item(i).markerID+" "+this.fullQueryData.rows.item(i).gpsXt +"  "+ this.fullQueryData.rows.item(i).gpsYt);
-
-          }
+       
 
           resolve(this.fullQueryData);
 
         }, (error) => {
           //console.error("Unable to execute sql", error);
-          console.error("countTable Unable to execute sql", JSON.stringify(error));
+          console.error("getGPSData Unable to execute sql", JSON.stringify(error));
           reject(error);
         })
       }, (error) => {
-        console.error("countTable Unable to open database", JSON.stringify(error));
+        console.error("getGPSData Unable to open database", JSON.stringify(error));
         reject(error);
       });
 

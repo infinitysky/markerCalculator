@@ -51,7 +51,7 @@ export class CalculatorPage {
     marker2Bearing:['']
   });
 
-  constructor(public navCtrl: NavController,public formBuilder:FormBuilder,public alertCtrl: AlertController,public sqliteopeator:SqliteService,) {
+  constructor(public navCtrl: NavController,public formBuilder:FormBuilder,public alertCtrl: AlertController,public sqliteopeator:SqliteService) {
     this.markerList=[];
     this.calculatorFullQueryData="";
     this.markerCheck1=false;
