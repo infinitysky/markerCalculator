@@ -7,10 +7,11 @@ import { MarkerService } from '../../providers/marker-service';
 import { SqliteService } from '../../providers/sqlite-service';
 
 //import {FormBuilder, Control, ControlGroup, Validators} from 'angular2/common';
-import * as mathjs from "mathjs";
+
 
 @Component({
   selector: 'page-calculator',
+
   providers: [MarkerService,SqliteService],
   templateUrl: 'calculator.html'
 
@@ -55,7 +56,7 @@ export class CalculatorPage {
     this.calculatorFullQueryData="";
     this.markerCheck1=false;
     this.markerCheck2=false;
-    this.newErrorRate=0;
+
 
     this.loadGPSdata();
 
@@ -71,7 +72,7 @@ export class CalculatorPage {
 
 
   cleanButtonClick(){
-    console.log("clicked");
+    console.log("clean Button Clicked");
     this.markerDetailsForm.reset();
 
 
@@ -231,12 +232,19 @@ export class CalculatorPage {
     var o2=this.cmarker2Bearing;
 
 
-    var Xt1 = Math.asin((11.75+o1+180)/180* Math.PI)*r1 + x1;
-    var Yt1 = Math.acos((11.75+o1+180)/180* Math.PI)*r1 + y1;
+    var Xt1 = Math.asin((11.75+o1+180)/180* Math.PI) * r1 + x1;
+    var Yt1 = Math.acos((11.75+o1+180)/180* Math.PI) * r1 + y1;
 
-    var Xt2 = Math.asin((11.75+o2+180)/180*Math.PI)*r2 + x2
-    var Yt2 = Math.acos((11.75+o2+180)/180*Math.PI)*r2 + y2
-    var Er = Math.sqrt((Xt1-Xt2)^2+(Yt1-Yt2)^2);
+    var Xt2 = Math.asin((11.75+o2+180)/180*Math.PI)*r2 + x2;
+    var Yt2 = Math.acos((11.75+o2+180)/180*Math.PI)*r2 + y2;
+
+    //var Er = Math.sqrt(((Xt1-Xt2)*(Xt1-Xt2)) + ((Yt1-Yt2)*(Yt1-Yt2)));
+
+    var tempData=((Xt1-Xt2)*(Xt1-Xt2)) + ((Yt1-Yt2)*(Yt1-Yt2));
+    var Er = Math.sqrt(tempData);
+
+    //var Er2 = mathjs.math.sqrt(tempData);
+
     this.newErrorRate=Er;
 
 
@@ -248,10 +256,15 @@ export class CalculatorPage {
     console.log("XT1 :"+Xt1);
     console.log("YT1 :"+Yt1);
     console.log("XT2 :"+Xt2);
-    console.log("YT2 :"+Er);
+    console.log("YT2 :"+Yt2);
+    console.log("Er :"+Er);
 
     console.log("this.newXt :"+this.newXt);
     console.log("this.newYt :"+this.newYt);
+    console.log("tempData: "+ tempData);
+   // console.log("Er2: "+ Er2);
+    console.log("this.newErrorRate :"+this.newErrorRate);
+
 
 
 

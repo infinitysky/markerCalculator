@@ -41,7 +41,7 @@ export class AboutPage {
     this.mymarks.load()
       .then(data1 => {
         this.myData = data1;
-        console.log(this.myData.length);
+        console.log("data Length: "+ this.myData.length);
         var i=0;
         sqlquery='('+this.myData[0].Tid +','+this.myData[0].Xt+','+this.myData[0].Yt+')';
         for(i=1;i<this.myData.length;i++ ){
@@ -79,8 +79,16 @@ export class AboutPage {
   uploadDataToServer(){
     console.log("upload");
 
-    this.gpsdata=this.sqliteopeator.showTable("GPSList");
-    console.log(JSON.stringify(this.gpsdata.row.item));
+    this.sqliteopeator.showTable("GPSList").then(data=>{
+      this.gpsdata=data;
+      console.log("get data");
+    });
+
+    for(let i = 0; i < this.gpsdata.rows.length; i++) {
+      console.log("json output: "+ this.gpsdata.rows.item(i).markerID);
+    }
+
+   // console.log(JSON.stringify(this.gpsdata.row.item));
 
   }
 

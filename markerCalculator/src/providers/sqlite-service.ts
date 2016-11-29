@@ -60,7 +60,7 @@ export class SqliteService {
   public rebuildTable(tableSql) {
     //DELETE FROM table_name;
     var newSqlQuery = tableSql;
-    console.log(newSqlQuery);
+    console.log("rebuildTable : "+ newSqlQuery);
 
     let db = new SQLite();
     db.openDatabase({
@@ -69,12 +69,12 @@ export class SqliteService {
     }).then(() => {
       //;CREATE TABLE IF NOT EXISTS distance (id INTEGER PRIMARY KEY AUTOINCREMENT, markerID int, distance int, soutceMarkerID int, Bearing double)
       db.executeSql(newSqlQuery, {}).then((data) => {
-        console.log("delete : ", JSON.stringify(data));
+        console.log("rebuildTable : ", JSON.stringify(data));
       }, (error) => {
-        console.error("Unable to execute sql", JSON.stringify(error));
+        console.error("rebuildTable Unable to execute sql", JSON.stringify(error));
       })
     }, (error) => {
-      console.error("Unable to open database", JSON.stringify(error));
+      console.error("rebuildTable Unable to open database", JSON.stringify(error));
     });
   }
 
@@ -277,13 +277,7 @@ export class SqliteService {
       this.storage.executeSql("SELECT * FROM people", []).then((data) => {
         let people = [];
         if(data.rows.length > 0) {
-          for(let i = 0; i < data.rows.length; i++) {
-            people.push({
-              id: data.rows.item(i).id,
-              firstname: data.rows.item(i).firstname,
-              lastname: data.rows.item(i).lastname
-            });
-          }
+
         }
         resolve(people);
       }, (error) => {
